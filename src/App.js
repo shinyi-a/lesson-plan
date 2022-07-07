@@ -1,23 +1,69 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState, useRef } from "react";
+import {
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  TextField,
+  Container,
+  Box,
+  CssBaseline,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Button,
+} from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers";
 
 function App() {
+  const [value, setValue] = useState(null);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      {/* <header className="App-header">hello world</header> */}
+      <CssBaseline />
+      <Container maxWidth="lg">
+        <Box
+          sx={{ bgcolor: "#cfe8fc", height: "100vh" }}
+          component="form"
+          noValidate
+          autoComplete="off"
         >
-          Learn React
-        </a>
-      </header>
+          <TextField
+            id="outlined-basic"
+            label="Subject Name"
+            variant="outlined"
+          />
+          <FormGroup>
+            <FormControlLabel control={<Checkbox />} label="Draft" />
+          </FormGroup>
+          <TextField
+            id="outlined-textarea"
+            label="Lesson Content"
+            multiline
+            rows={10}
+            // fullWidth
+            sx={{ width: "80%" }}
+            variant="outlined"
+          />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Date"
+              value={value}
+              onChange={(newValue) => {
+                setValue(newValue);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+              inputFormat="dd-MM-yyyy"
+            />
+          </LocalizationProvider>
+        </Box>
+      </Container>
     </div>
   );
 }
