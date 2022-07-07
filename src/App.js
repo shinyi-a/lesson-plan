@@ -1,5 +1,6 @@
 import "./App.css";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import DisplayTable from "./DisplayTable";
 import {
   Table,
   TableCell,
@@ -105,6 +106,7 @@ function App() {
       {/* <header className="App-header">hello world</header> */}
       <CssBaseline />
       <Container maxWidth="lg">
+        <DisplayTable data={allInput} />
         <Box
           sx={{ bgcolor: "#cfe8fc", height: "100vh" }}
           component="form"
