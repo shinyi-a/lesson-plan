@@ -36,3 +36,89 @@
     transform: rotate(360deg);
   }
 } */
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width:90%;
+  /* margin: 50px */
+  height: 90%;
+  margin: 0px 50px
+
+}
+
+.content-container {
+  display: flex;
+  /* height:100vh; */
+  /* flex-direction: row; */
+  justify-content: center;
+  align-items: center;
+  /* width:90%; */
+  height: 100%
+}
+
+.table-container {
+  width:50%;
+  margin: 30px 15px 30px 0px;
+  height: 90%;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+.lessonplan-container{
+  width:50%;
+  margin: 30px 0px 30px 15px;
+  height: 90%;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+form {
+  margin: 0px 0px;
+  padding: 30px;
+}
+
+.App {
+  /* background-color: #F5F5F5; */
+  height:100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* width: 100%; */
+}
+
+.sameline{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center
+}
+
+.button-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%
+}
+
+h4 {
+  padding-top: 30px;
+}
+
+.add-button{
+  /* display: flex;
+  flex-direction: row;
+  justify-content: center; */
+  width: 90%
+}
+
+.add-button-container{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+}

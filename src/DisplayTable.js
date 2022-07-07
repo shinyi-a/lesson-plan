@@ -11,7 +11,7 @@ import {
 const moment = require("moment");
 
 export default function DisplayTable(props) {
-  console.log("this is props");
+  //   console.log("this is props");
   //   console.log(props.data);
   let lessonPlanData = props.data;
 
@@ -66,20 +66,18 @@ export default function DisplayTable(props) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell key="subject">
+            <TableCell key="subject" onClick={handleSortRequest("subject")}>
               <TableSortLabel
                 active={dataToSort === "subject"}
                 direction={dataToSort === "subject" ? sortDirection : "asc"}
-                onClick={handleSortRequest("subject")}
               >
                 Subject
               </TableSortLabel>
             </TableCell>
-            <TableCell key="date">
+            <TableCell key="date" onClick={handleSortRequest("date")}>
               <TableSortLabel
                 active={dataToSort === "date"}
                 direction={dataToSort === "date" ? sortDirection : "asc"}
-                onClick={handleSortRequest("date")}
               >
                 Date
               </TableSortLabel>
@@ -91,9 +89,9 @@ export default function DisplayTable(props) {
             lessonPlanData,
             getComparator(sortDirection, dataToSort)
           ).map((lesson, index) => (
-            <TableRow key={index}>
+            <TableRow key={index} hover={true}>
               <TableCell>{lesson.subject}</TableCell>
-              <TableCell>{moment(lesson.date).format("DD MMM YY")}</TableCell>
+              <TableCell>{moment(lesson.date).format("DD MMM YYYY")}</TableCell>
             </TableRow>
           ))}
         </TableBody>
