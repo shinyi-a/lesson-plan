@@ -6,38 +6,60 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  TextField,
-  Container,
-  Box,
-  CssBaseline,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Button,
+  TableBody,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+const moment = require("moment");
 
 export default function DisplayTable(props) {
-  //   console.log("this is props" + props);
+  console.log("this is props");
   //   console.log(props.data);
-  //   let { data } = props;
-  let userdata = props.data;
-  console.log("user data");
-  console.log(userdata);
-  const [activeSort, setActiveSort] = useState("subject");
-  const [orderDirection, setOrderDirection] = useState("asc");
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(1);
+  let lessonPlanData = props.data;
 
-  const handleSort = (e, property) => {
-    const isAscending = activeSort === property && orderDirection === "asc";
-    setActiveSort(property);
-    setOrderDirection(isAscending ? "desc" : "asc");
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [dataToSort, setDataToSort] = useState("subject");
+
+  const processSort = (e, property) => {
+    const isAscending = dataToSort === property && sortDirection === "asc";
+    setDataToSort(property);
+    setSortDirection(isAscending ? "desc" : "asc");
   };
 
-  const handleSortHandler = (property) => (e) => {
-    handleSort(e, property);
+  const handleSortRequest = (property) => (e) => {
+    processSort(e, property);
   };
+
+  const sortedRowInformation = (rowArr, comparator) => {
+    const lessonPlanArr = rowArr.map((lessonplan, index) => [
+      lessonplan,
+      index,
+    ]);
+    // console.log("array with index")
+    // console.log(lessonPlanArr);
+    lessonPlanArr.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    // console.log("array after sort");
+    // console.log(lessonPlanArr);
+    return lessonPlanArr.map((lessonplan) => lessonplan[0]);
+  };
+
+  function descendingComparactor(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function getComparator(order, orderBy) {
+    return order === "desc"
+      ? (a, b) => descendingComparactor(a, b, orderBy)
+      : (a, b) => -descendingComparactor(a, b, orderBy);
+  }
 
   return (
     <TableContainer>
@@ -46,24 +68,35 @@ export default function DisplayTable(props) {
           <TableRow>
             <TableCell key="subject">
               <TableSortLabel
-                active={activeSort === "subject"}
-                direction={activeSort === "subject" ? orderDirection : "asc"}
-                onClick={handleSortHandler("subject")}
+                active={dataToSort === "subject"}
+                direction={dataToSort === "subject" ? sortDirection : "asc"}
+                onClick={handleSortRequest("subject")}
               >
                 Subject
               </TableSortLabel>
             </TableCell>
             <TableCell key="date">
               <TableSortLabel
-                active={activeSort === "date"}
-                direction={activeSort === "date" ? orderDirection : "asc"}
-                onClick={handleSortHandler("date")}
+                active={dataToSort === "date"}
+                direction={dataToSort === "date" ? sortDirection : "asc"}
+                onClick={handleSortRequest("date")}
               >
                 Date
               </TableSortLabel>
             </TableCell>
           </TableRow>
         </TableHead>
+        <TableBody>
+          {sortedRowInformation(
+            lessonPlanData,
+            getComparator(sortDirection, dataToSort)
+          ).map((lesson, index) => (
+            <TableRow key={index}>
+              <TableCell>{lesson.subject}</TableCell>
+              <TableCell>{moment(lesson.date).format("DD MMM YY")}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
     </TableContainer>
   );

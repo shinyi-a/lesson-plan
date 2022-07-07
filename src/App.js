@@ -2,11 +2,6 @@ import "./App.css";
 import React, { useState, useEffect } from "react";
 import DisplayTable from "./DisplayTable";
 import {
-  Table,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
   TextField,
   Container,
   Box,
@@ -16,7 +11,6 @@ import {
   Checkbox,
   Button,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -24,8 +18,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 function App() {
   const [value, setValue] = useState(null);
   const [inputError, setInputError] = useState(false);
-  // const [allInput, setAllInput] = useState([]);
-  let allInput = [];
+  const [allInput, setAllInput] = useState([]);
   const [userInput, setUserInput] = useState({
     subject: "",
     lessoncontent: "",
@@ -50,47 +43,47 @@ function App() {
 
   useEffect(() => {
     if (window.localStorage.getItem("lessonplan") === null) {
+      setAllInput([]);
+      window.localStorage.setItem("lessonplan", JSON.stringify(allInput));
       console.log("null is triggered");
     } else {
-      // setAllInput([]);
-      // setAllInput(JSON.parse(window.localStorage.getItem("lessonplan")));
-      allInput = JSON.parse(window.localStorage.getItem("lessonplan"));
+      setAllInput(JSON.parse(window.localStorage.getItem("lessonplan")));
       console.log("i am loaded");
-      console.log(allInput);
-      console.log(JSON.parse(window.localStorage.getItem("lessonplan")));
     }
-  }, [[], handleChange]);
+  }, []);
+
+  useEffect(() => {
+    setAllInput(JSON.parse(window.localStorage.getItem("lessonplan")));
+  }, [handleSubmit]);
 
   const handleChange = (e) => {
     const label = e.target.name;
     const input = e.target.value;
     setInputError(false);
     setUserInput({ ...userInput, [label]: input });
-    console.log("this is handlechange subject: " + userInput.subject);
-    console.log("this is handlechange lesson: " + userInput.lessoncontent);
-    console.log("this is handlechange date: " + userInput.date);
+    // console.log("this is handlechange subject: " + userInput.subject);
+    // console.log("this is handlechange lesson: " + userInput.lessoncontent);
+    // console.log("this is handlechange date: " + userInput.date);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (userInput.subject && userInput.lessoncontent && value) {
       console.log("i am clicked");
-      // setAllInput((prevInput) => [...prevInput, userInput]);
-      console.log(userInput);
-      // setAllInput([...allInput, userInput]);
-      allInput.push(userInput);
-      // console.log("this is all Input: " + allInput[0]);
-      console.log(allInput);
-      console.log("this is user Input" + userInput);
-      window.localStorage.setItem("lessonplan", JSON.stringify(allInput));
+      let store = [...allInput, userInput];
+      console.log(store);
+      // console.log(userInput);
+      setAllInput(store);
+      // console.log("this is all input ");
+      // console.log(allInput);
+      // console.log("this is user Input" + userInput);
+      window.localStorage.setItem("lessonplan", JSON.stringify(store));
       setUserInput({
         subject: "",
         lessoncontent: "",
         date: "",
       });
       setValue(null);
-      // setAllInput([]);
-      allInput = [];
     } else {
       setInputError(true);
     }
@@ -98,12 +91,11 @@ function App() {
 
   useEffect(() => {
     setUserInput({ ...userInput, date: value });
-    console.log("this is the date: " + userInput.date);
+    // console.log("this is the date: " + userInput.date);
   }, [value]);
 
   return (
     <div className="App">
-      {/* <header className="App-header">hello world</header> */}
       <CssBaseline />
       <Container maxWidth="lg">
         <DisplayTable data={allInput} />
@@ -129,7 +121,6 @@ function App() {
             label="Lesson Content"
             multiline
             rows={10}
-            // fullWidth
             sx={{ width: "80%" }}
             variant="outlined"
             name="lessoncontent"
